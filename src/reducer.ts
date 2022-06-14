@@ -1,5 +1,5 @@
 import type { LogsData } from "./Logs";
-type ReducerState = {
+export type ReducerState = {
   logs: LogsData[];
   nextLog: Date;
 };

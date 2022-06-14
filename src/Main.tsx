@@ -3,7 +3,7 @@ import type { LogsData } from "./Logs";
 import icon from "../public/spell_fire_felfireward.webp";
 import Logs from "./Logs";
 import reducer, { SAVED_LOGS_KEY } from "./reducer";
-import { timeDiff } from "./utils";
+import Clock from "./Clock";
 
 let initialData: LogsData[] = [];
 
@@ -12,19 +12,6 @@ const Main: FunctionComponent = () => {
     logs: initialData,
     nextLog: new Date(),
   });
-  const [now, setNow] = useState(new Date());
-  const [nextLog, setNextLog] = useState(
-    new Date(timeDiff(state.nextLog, now))
-  );
-
-  useEffect(() => {
-    const timeoutID = setTimeout(() => {
-      const newNow = new Date();
-      setNow(newNow);
-      setNextLog(new Date(timeDiff(state.nextLog, newNow)));
-    }, 1000);
-    return () => clearTimeout(timeoutID);
-  }, [now]);
 
   useEffect(() => {
     const lsLogsData = localStorage.getItem(SAVED_LOGS_KEY);
@@ -42,11 +29,7 @@ const Main: FunctionComponent = () => {
       <h1 className="text-gray-500 text-xl text-center">
         Bloodhunter's Quarry Ledger
       </h1>
-      <h2 className="text-center text-purple-800 text-lg font-bold">
-        {now > state.nextLog
-          ? "Available"
-          : `In ${nextLog.getMinutes()}:${nextLog.getSeconds()}`}
-      </h2>
+      <Clock state={state} />
       <button
         onClick={() => {
           dispatch({ type: "ADD_LOG" });
